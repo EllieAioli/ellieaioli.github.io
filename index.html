@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+	
+	<link rel="stylesheet" href="files/mystyle.css">
+	<script src="files/jquery-3.2.1.min.js"></script>
+	<script src="files/scripts.js"></script>
+	
+	<script src="files/autosize.min.js"></script>
+	<script src="files/papaparse.min.js"></script>
+
+	<!-- font awesome -->
+	<link rel="stylesheet" href="files/fa-all.min.css">
+	<script src="files/fa-all.min.js"></script>
+
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="files/bootstrap.min.css">
+	<script src="files/bootstrap.min.js"></script>
+
+	<!-- jquery confirm -->
+	<link rel="stylesheet" href="files/jquery-confirm.css">
+	<script src="files/jquery-confirm.js"></script>
+
+	<!-- jquery ui -->
+	<link rel="stylesheet" href="files/jquery-ui.min.css">
+	<script src="files/jquery-ui.min.js"></script>
+</head>
+
+<body>
+	<!-- Menu bar  -->
+	<div style="display: flex;padding-top:7px;">
+		<div class="flex-box" style="width:50%">
+			<div class="menu-item">
+				<input class="form-control form-control-sm" type="text" placeholder="Map URL" style="width:20ch;" id="mapURL">
+			</div>
+			<div class="menu-item">
+				<a class="btn btn-primary btn-sm px-1" id="btnMapURLSubmit">Change</a>
+			</div>
+			<div class="menu-item">
+				<!-- upload -->
+			  	<label class="btn btn-primary btn-sm" title="Upload map image"><i class="fa fa-upload"></i><input type="file" id="customFile" accept="image/*" hidden></label>
+			</div>
+			<div class="menu-item">
+				<!-- reset -->
+				<a class="btn btn-sm btn-dark" id="resetMap" title="Reset map image"><i class="fas fa-recycle" aria-hidden="true"></i></a>
+			</div>
+			<div class="menu-item">
+				<span class="text-light" style="font-size: 12pt;">&#9679;</span>
+			</div>
+			<div class="menu-item">
+				<a id="btnBorders" title="Hide map borders" class="btn btn-sm btn-outline-secondary" data-toggle="button" aria-pressed="true"><i class="fa fa-eye-slash" aria-hidden="true"></i> Borders</a>
+			</div>
+			<div class="menu-item">
+				<a id="btnHideControls" title="Hide move, resize, etc. icons" class="btn btn-sm btn-outline-secondary" data-toggle="button" aria-pressed="true"><i class="fa fa-eye-slash" aria-hidden="true" ></i> Controls</a>
+			</div>
+			<div class="menu-item">
+				<span class="text-light" style="font-size: 12pt;">&#9679;</span>
+			</div>
+			<div class="menu-item">
+				<a id="btnClear" title="Delete all map markers"class="confirm btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i> Markers</a>
+			</div>
+		</div>
+		<div class="flex-box" style="width:50%">
+			<!--<div class="menu-item">
+				<a id="btnAddBuilding" class="btn btn-sm btn-primary" title="Add a new, blank mission"><i class="fa fa-plus" aria-hidden="true"></i> New</a>
+			</div>-->
+			<div class="menu-item">
+				<span class="text-light">Text Color:</span>
+			</div>
+			<div class="menu-item">
+				<input type="text" class="form-control form-control-sm" id="txtTextColor" placeholder="#22F2F2">
+			</div>
+			<div class="menu-item">
+				<span class="text-light" style="font-size: 12pt;">&#9679;</span>
+			</div>
+			<div class="menu-item">
+				<label class="btn btn-primary btn-sm" title="Upload a .CSV file from DF2Haven"><i class="fa fa-upload"></i> DF2Haven .CSV <input type="file" id="itemMissions" accept=".csv" hidden></label>
+			</div>
+			<div class="menu-item">
+				<span class="text-light" style="font-size: 12pt;">&#9679;</span>
+			</div>
+			<div class="menu-item">
+				<a id="btnRemoveAllMissions" title="Delete all missions, including moved missions" class="btn btn-sm btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Missions</a>
+			</div>
+
+		</div></div>
+
+	<!-- main content -->
+	<div class="row">
+		<!-- map col -->
+		<div class="" style="display:flex; flex-grow: 0;">
+			<div class="info-panel dragging">
+				<div>
+					<span class="text-light">Missions: </span><span id="lblNumMissions" class="text-light">-</span><br>
+					<span class="text-success">Cash: $</span><span id="lblCash" class="text-success">-</span><br>
+	    			<span class="text-warning">EXP: </span><span id="lblEXP" class="text-light">-</span>
+	    		</div>
+	    		<div>
+    				<textarea id="info-textarea" class="text-light" style="border: none;background: transparent;min-height: 25px;" rows="1" placeholder="Info.."></textarea>
+    			</div>
+			</div>
+			<div>
+				<div id="tableDiv">
+		        	<!--Table will gentare here~!-->
+		    	</div>
+				<div class="coords-panel">
+					<input id="lblCoords" type="text" value="0-0">
+				</div>
+			</div>
+		</div>
+
+		<!-- mission col -->
+		<div class="col px-6">
+			<div class="missionBox" style="column-count:2">
+				<div id="dragbox" class="draggies">
+					<div class="row">
+						<div class="col">
+							<div class="dragging">
+								<div style="width:3ch;padding-left: 4px;padding-right:3px;">
+									<i class="fas fa-arrows-alt" style="color:#eee;"></i>
+								</div>
+								<div>
+								  	<textarea class="draggyBuilding" placeholder="Building" rows="1"></textarea>
+							 	</div>
+					 		</div>
+					 	</div>
+				 		<div class="col px-2">
+							<textarea class="draggyCity" placeholder="City" rows="1"></textarea>
+						</div>
+					 	<!--<div class="hideable">
+							<a href="#" class="btnDelete fa fa-minus-circle" style="color:#470F0B;background-color:white;font-size: 10pt;margin-left: 4px;margin-bottom: 2px;border-radius: 50%;border:-1;"></a>
+						</div>-->
+				  	</div>
+				</div>
+				<!--<ul id="sortable" class="list-unstyled card-columns" style="column-count:1;">
+					<li class="customLi list-group-item ui-state-default py-0">
+						<div class="flex-box">
+							<div style="flex:1;min-width:40px;">
+								<input type="text" class="txtLetter" value="1">
+								<i class="fa fa-sort"></i>
+							</div>
+							<div style="flex:10;">
+								<textarea class="txtBuilding" placeholder="Building name.." rows="1"></textarea>
+							</div>
+							<div style="flex:5;">
+								<textarea class="txtBuilding" placeholder="City name.." rows="1"></textarea>
+							</div>
+							
+						</div>
+					</li>
+				</ul>-->
+			</div>
+		</div>
+	</div>
+</body>
+</html>
