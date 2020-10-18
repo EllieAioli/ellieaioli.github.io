@@ -35,10 +35,10 @@ $(document).ready(function() {
 
 
 	var drag1 = `<div id="dragbox" class="draggies">
-					<div class="row">
-						<div class="col">
+					<div style="display: flex;">
+						<div>
 							<div class="dragging">
-								<div style="width:3ch;padding-left: 4px;padding-right:3px;">
+								<div style="width:3ch;">
 									<i class="fas fa-arrows-alt" style="color:#eee;"></i>
 								</div>
 								<div>
@@ -47,7 +47,7 @@ $(document).ready(function() {
 							 	</div>
 					 		</div>
 					 	</div>
-				 		<div class="col px-2">
+				 		<div>
 							<textarea class="draggyCity" placeholder="City" rows="1">`
 	var drag3 = `</textarea>
 						</div>
