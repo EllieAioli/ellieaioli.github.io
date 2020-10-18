@@ -6,6 +6,7 @@ body {
 	line-height: 0;
 	border-collapse:collapse;
 	color:rgba(255, 0, 84, 0.20);
+    border-color:rgba(255, 0, 84, 0.20);
 	background-size:cover; 
 	width:1050px;
 	height:788px;
@@ -60,6 +61,7 @@ body {
 
 .hidden_border {
 	color:rgba(0, 0, 0, 0.00) !important;
+    border-color:rgba(0, 0, 0, 0.00) !important;
 }
 
 .td_square {
@@ -107,7 +109,8 @@ body {
 }
 
 .missionBox {
-    /*height: 80%;*/
+    height: 788px;;
+    overflow:visible;
 }
 
 .draggies {
@@ -130,6 +133,7 @@ body {
     font-weight: bold;
     min-height: 22px !important;
     height: 22px;
+    overflow:hidden
 }   
 .draggyCity {
     background: rgba(255,255,255,0.2);
@@ -142,6 +146,7 @@ body {
     font-weight: bold;
     min-height: 22px;
     height: 22px;
+    overflow:hidden
 }   
 
 .draggyClean {
@@ -166,10 +171,4 @@ li:nth-child(odd) { background: #EBEBEB; }
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
-}
-
-@media screen and (max-width: 1720px) {
-    .missionBox {
-        column-count: 1 !important;
-    }
 }
