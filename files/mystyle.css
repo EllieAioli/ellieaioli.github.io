@@ -1,0 +1,175 @@
+body {
+    background-color: #1A1A18 !important;
+}
+
+#genTable {
+	line-height: 0;
+	border-collapse:collapse;
+	color:rgba(255, 0, 84, 0.20);
+	background-size:cover; 
+	width:1050px;
+	height:788px;
+	background-image: url(file:///C:/Users/Aaron.LNET/Documents/DF2%20Map/df2map_10-16-20.jpg);
+}
+
+#txtTextColor {
+    width: 10ch;
+}
+
+
+.menu-item {
+    padding-right: 5px;
+}
+
+.flex-box {
+	display: flex;
+	justify-content: center;
+	flex-grow:0;
+	flex-shrink: 0;
+}
+
+.squareInput {
+    width: 2ch;
+    background: transparent;
+    border: 0;
+    color:rgba(255, 0, 0, 1);
+}
+
+
+.hidden_dot {
+	margin: 0;
+	padding: 0;
+	width: max-content;
+	color:rgba(0, 0, 0, 0.00);
+	font-size: 16px;
+}
+
+.selected {
+	color:rgba(255, 0, 0, 1) !important;
+}
+
+.txtLetter {
+    width: 3ch;
+    background:transparent;
+    border:none;
+}
+
+.selected_td {
+	background-color: rgba(255, 0, 0, 0.1) !important;
+}
+
+.hidden_border {
+	color:rgba(0, 0, 0, 0.00) !important;
+}
+
+.td_square {
+	text-align:center
+}
+
+.customLi {
+   width: 100%;
+}
+
+
+
+.info-panel {
+    position: absolute;
+    margin-left:20px;
+    margin-top:20px;
+    padding: 15px;
+    background: #1A1A18;
+    border: 3px solid #B1B1B1;
+    border-radius: 5%;
+}
+
+
+#lblCoords {
+    width:7ch;
+    font-size: 11pt;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.2);
+    color:rgba(255,255,255,0.6);
+    text-align:center;
+}
+
+
+
+.txtBuilding {
+    background: transparent;
+    border: none;
+    width: 100%;
+    font-size: 11pt;
+    /*resize: none;*/
+}   
+
+.invisible_text {
+    color: transparent !important;
+}
+
+.missionBox {
+    /*height: 80%;*/
+}
+
+.draggies {
+    width: 325px;
+    background: transparent;
+    border:none !important;
+}
+
+.draggyBuilding {
+    position: absolute;
+    top:0;
+    left:3ch;
+    background: rgba(255,255,255,0.2);
+    border: none;
+    width: 100%;
+    font-size: 10pt;
+    color: #22F2F2;
+    resize:both;
+    font-family: Arial;
+    font-weight: bold;
+    min-height: 22px !important;
+    height: 22px;
+}   
+.draggyCity {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    width: 100px;
+    font-size: 10pt;
+    color: #22F2F2;
+    resize:both;
+    font-family: Arial;
+    font-weight: bold;
+    min-height: 22px;
+    height: 22px;
+}   
+
+.draggyClean {
+    resize:none !important;
+    background: transparent !important;
+}
+
+
+
+/*.missionBox>* {
+    flex: 1 1 160px;
+    line-height: 1.5 !important;
+}*/
+
+li:nth-child(odd) { background: #EBEBEB; }
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+}
+
+@media screen and (max-width: 1720px) {
+    .missionBox {
+        column-count: 1 !important;
+    }
+}
