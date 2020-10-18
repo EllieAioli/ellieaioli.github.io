@@ -1,4 +1,4 @@
-var defaultMap = "file:///C:/Users/Aaron.LNET/Documents/DF2%20Map/df2map_10-16-20.jpg";
+var defaultMap = "files/df2map_10-16-20.jpg";
 var debug = 0;
 $(document).ready(function() {
 	function thousands_separators(num){
