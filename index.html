@@ -73,6 +73,24 @@
 				<span class="text-light" style="font-size: 12pt;">&#9679;</span>
 			</div>
 			<div class="menu-item">
+				<span class="text-light">>Cash:</span>
+			</div>
+			<div class="menu-item">
+				<input type="text" class="form-control form-control-sm" id="txtMinCash" placeholder="900">
+			</div>
+			<div class="menu-item">
+				<span class="text-light">>EXP:</span>
+			</div>
+			<div class="menu-item">
+				<input type="text" class="form-control form-control-sm" id="txtMinEXP" placeholder="3000">
+			</div>
+			<div class="menu-item">
+				<span class="text-light">Guide Only</span>
+			</div>
+			<div class="menu-item">
+				<input type="checkbox" class="form-control form-control-sm " id="chkGuides">
+			</div>
+			<div class="menu-item">
 				<label class="btn btn-primary btn-sm" title="Upload a .CSV file from DF2Haven"><i class="fa fa-upload"></i> DF2Haven .CSV <input type="file" id="itemMissions" accept=".csv" hidden></label>
 			</div>
 			<div class="menu-item">
@@ -87,7 +105,7 @@
 	<!-- main content -->
 	<div class="row">
 		<!-- map col -->
-		<div class="" style="display:flex; flex-grow: 0;">
+		<div class="col" style="display:flex; flex-grow: 0;">
 			<div class="info-panel">
 				<div>
 					<span class="text-light">Missions: </span><span id="lblNumMissions" class="text-light">-</span><br>

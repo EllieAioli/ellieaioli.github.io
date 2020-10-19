@@ -84,7 +84,7 @@ $(document).ready(function() {
 	});
 
 	$('.td_square').hover(function(){
-		$('#lblCoords').attr('placeholder',$(this).attr('id'));
+		$('#lblCoords').attr('value',$(this).attr('id'));
 	});
 
 	$('.squareInput').on("change",function(e){
@@ -129,26 +129,52 @@ $(document).ready(function() {
 
 	// On mision csv upload
 	$("#itemMissions").on('change', function(){
+		// cumulators
 		var cash = 0;
 		var exp = 0;
 		var numMissions = 0;
+		
 		$.confirm({
 	    	title: 'Confirm!',
-	    	content: 'Are you sure you want to clear all missions?',
+	    	content: 'Make sure your filter settings are correct! <br><span style="color:red;font-weight:bold">THIS WILL WIPE ALL CURRENT MISSIONS!!</span>',
 	   	 	buttons: {
 	        	confirm: function () {
-	            	$(".draggies").remove();
+					var minCash = parseInt($("#txtMinCash").val());
+					var minExp = parseInt($("#txtMinEXP").val());
+					var chkGuides = $("#chkGuides").prop('checked');
+					if (isNaN(minCash)){minCash=0;}
+					if (isNaN(minExp)){minExp=0;}
+
+					$(".draggies").remove();
+
 	            	Papa.parse($("#itemMissions").prop('files')[0], {
 						header: true,
 						step: function(results) {
+							// todo: sort list of filtered missions by city desc and then building desc
 							if(typeof results.data["Mission Building"] !== "undefined") {
-								var buildingName = results.data["Mission Building"];
-								var cityName = results.data["Mission City"];
-								numMissions++;
-								cash += parseInt(results.data["Cash"]);
-								exp += parseInt(results.data["Exp"]);
-								//$("#sortable").append(li1+buildingName+li2+cityName+li3);
-								$(".missionBox").append(drag1+buildingName+drag2+cityName+drag3)
+								var missionCash = results.data["Cash"];
+								var missionEXP = results.data["Exp"];
+								var missionGuide = results.data["Quest Walkthrough"];
+								var missionType = results.data["Mission Type"];
+
+								if (missionCash >= minCash && missionEXP >= minExp && missionType != "Exterminate") {
+									var buildingName = results.data["Mission Building"];
+									var cityName = results.data["Mission City"];
+
+									if (chkGuides == true && missionGuide != "add guide") {
+										numMissions++;
+										cash += parseInt(results.data["Cash"]);
+										exp += parseInt(results.data["Exp"]);
+										//$("#sortable").append(li1+buildingName+li2+cityName+li3);
+										$(".missionBox").append(drag1+buildingName+drag2+cityName+drag3)
+									} else if (chkGuides == false) {
+										numMissions++;
+										cash += parseInt(results.data["Cash"]);
+										exp += parseInt(results.data["Exp"]);
+										//$("#sortable").append(li1+buildingName+li2+cityName+li3);
+										$(".missionBox").append(drag1+buildingName+drag2+cityName+drag3)
+									}
+								}
 							}
 						},
 						complete: function(results) {

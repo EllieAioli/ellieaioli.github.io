@@ -16,7 +16,12 @@ body {
 #txtTextColor {
     width: 10ch;
 }
-
+#txtMinCash {
+    width: 7ch;
+}
+#txtMinEXP {
+    width: 7ch;
+}
 
 .menu-item {
     padding-right: 5px;
