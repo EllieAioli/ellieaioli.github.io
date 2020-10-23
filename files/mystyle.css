@@ -5,8 +5,9 @@ body {
 #genTable {
 	line-height: 0;
 	border-collapse:collapse;
-	color:rgba(255, 0, 84, 0.20);
+	color:rgba(255, 0, 84, 0.40);
     border-color:rgba(255, 0, 84, 0.20);
+    border-width: 1px;
 	background-size:cover; 
 	width:1050px;
 	height:788px;

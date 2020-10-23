@@ -1,7 +1,7 @@
 
 var debug = 0;
 $(document).ready(function() {
-	var defaultMap = "files/df2map_10-16-20.jpg";
+	var defaultMap = "files/df2map_10-22-20.jpg";
 
 	function thousands_separators(num){
 	    var num_parts = num.toString().split(".");
