@@ -217,6 +217,7 @@ $(document).ready(function() {
 							/*$("#lblCash").attr("value",thousands_separators(cash));
 							$("#lblEXP").attr("value",thousands_separators(exp));
 							$("#lblNumMissions").attr("value",numMissions);*/
+							missionArray.sort(SortMissions);
 							for (var i=0;i<missionArray.length;i++) {
 								var buildingName = missionArray[i][0];
 								var cityName = missionArray[i][1];
