@@ -10,15 +10,6 @@ $(document).ready(function() {
 	    return num_parts.join(".");
   	}
 
-  	/*function sortBuildIndex(){
-		var listItems = $("#sortable input");
-		var i = 1;
-		for (let li of listItems) {
-			$(li).val(i);
-			i++;
-		}	
-	}*/
-
 	function makeDraggies(){
 		$('.dragging').draggable();
 		$('.info-panel').draggable({
@@ -27,13 +18,7 @@ $(document).ready(function() {
 
 	};
 
-
 	makeDraggies();
-
-	var li1 = '<li class="customLi list-group-item ui-state-default py-0"><div class="flex-box"><div style="flex:1;min-width:40px;"><input type="text" class="txtLetter" value="1"><i class="fa fa-sort"></i></div><div style="flex:10;"><textarea class="txtBuilding" placeholder="Building name.." rows="1">'
-	var li2 = '</textarea></div><div style="flex:5;"><textarea class="txtBuilding" placeholder="City name.." rows="1">'
-	var li3 = '</textarea></div><div style="flex:1"><a href="#" class="btnDelete badge badge-pill badge-danger noselect" style="color:white;">-</a></div></div></li>'
-
 
 	var drag1 = `<div id="dragbox" class="draggies">
 					<div style="display: flex;">
@@ -59,28 +44,46 @@ $(document).ready(function() {
 				</div>`
   	
 	//table generation over map image
-  	var number_of_rows = 18;
-  	var number_of_cols = 24;
- 	var table_body = '<table id="genTable" class="noselect" border="1">';
-	for(var i=0;i<number_of_rows;i++){
-		table_body+='<tr>';
-		for(var j=0;j<number_of_cols;j++){
-    		var temp_rows = number_of_rows - i;
-    		var temp_cols = j + 1;
-        	table_body +='<td id="'+temp_cols+'-'+temp_rows+'" class="td_square"><div class="flex-box"><div class="inner">';
-        	//table_body +='<input type="text" class="squareInput">';
-        	table_body +='<p class="hidden_dot">&#11044;</p>';
-        	table_body +='</div></div></td>';
+	var tableMode = 0;
+	var init = true;
+	function generateTable(precise){
+		if (!init) {
+			if (tableMode == 0){tableMode=1}
+			else if (tableMode == 1){tableMode=0};
+		};
+		if(precise){
+			var number_of_rows = 18*2;
+			var number_of_cols = 24*2;
+			var pClass = "hidden_dot"
+		} else {
+			var number_of_rows = 18;
+			var number_of_cols = 24;
+			var pClass = "hidden_dot_big"
+		};
+		init = false;
+
+		var table_body = '<table id="genTable" class="noselect" border="1">';
+		for(var i=0;i<number_of_rows;i++){
+			table_body+='<tr>';
+			for(var j=0;j<number_of_cols;j++){
+				var temp_rows = number_of_rows - i;
+				var temp_cols = j + 1;
+				table_body +='<td id="'+temp_cols+'-'+temp_rows+'" class="td_square"><div class="flex-box"><div class="inner">';
+				table_body +='<p class="'+pClass+'">&#11044;</p>';
+				table_body +='</div></div></td>';
+			}
+			table_body+='</tr>';
 		}
-		table_body+='</tr>';
+		table_body+='</table>';
+		$('#tableDiv').html(table_body);
 	}
-	table_body+='</table>';
-	$('#tableDiv').html(table_body);
+	generateTable();
+  	
 
 	
 	
 
-	$('.td_square').on('click', function(e){
+	$('#tableDiv').on('click', '.td_square', function(e){
 		$(this).find("p").toggleClass("selected");
 	});
 
@@ -128,6 +131,32 @@ $(document).ready(function() {
   		$('#genTable').css("background-image", 'url('+URL.createObjectURL(this.files[0])+')');
 	});
 
+	$("#btnPrecise").on("click", function(e) {
+		$.confirm({
+	    	title: 'Confirm!',
+	    	content: 'This will clear all markers! Are you sure?',
+	   	 	buttons: {
+	        	confirm: function () {
+	            	if (tableMode==0) {generateTable(true)}
+					else if (tableMode==1){generateTable()}
+	        	},
+	        	cancel: function () {
+	        		// do nothing
+	        	}
+	    	}
+		});
+		
+	});
+
+	function SortMissions(a, b) {
+		if (a[1] === b[1]) {
+			return 0;
+		}
+		else {
+			return (a[1] < b[1]) ? -1 : 1;
+		}
+	} // https://stackoverflow.com/questions/16096872/how-to-sort-2-dimensional-array-by-column-value
+
 	// On mision csv upload
 	$("#itemMissions").on('change', function(){
 		// cumulators
@@ -137,7 +166,7 @@ $(document).ready(function() {
 		
 		$.confirm({
 	    	title: 'Confirm!',
-	    	content: 'Make sure your filter settings are correct! <br><span style="color:red;font-weight:bold">THIS WILL WIPE ALL CURRENT MISSIONS!!</span>',
+	    	content: 'Make sure your filter settings are correct! <br><span style="color:red;font-weight:bold">This will wipe all mission labels!!</span>',
 	   	 	buttons: {
 	        	confirm: function () {
 					var minCash = parseInt($("#txtMinCash").val());
@@ -148,11 +177,14 @@ $(document).ready(function() {
 
 					$(".draggies").remove();
 
+					const missionArray = [];
+					//eg. [[building,city,cash,exp]]
 	            	Papa.parse($("#itemMissions").prop('files')[0], {
 						header: true,
 						step: function(results) {
-							// todo: sort list of filtered missions by city desc and then building desc
+							
 							if(typeof results.data["Mission Building"] !== "undefined") {
+								var mission = [];
 								var missionCash = results.data["Cash"];
 								var missionEXP = results.data["Exp"];
 								var missionGuide = results.data["Quest Walkthrough"];
@@ -166,23 +198,30 @@ $(document).ready(function() {
 										numMissions++;
 										cash += parseInt(results.data["Cash"]);
 										exp += parseInt(results.data["Exp"]);
-										//$("#sortable").append(li1+buildingName+li2+cityName+li3);
-										$(".missionBox").append(drag1+buildingName+drag2+cityName+drag3)
+										mission = [buildingName,cityName,missionCash,missionEXP];
+										missionArray.push(mission);
 									} else if (chkGuides == false) {
 										numMissions++;
 										cash += parseInt(results.data["Cash"]);
 										exp += parseInt(results.data["Exp"]);
-										//$("#sortable").append(li1+buildingName+li2+cityName+li3);
-										$(".missionBox").append(drag1+buildingName+drag2+cityName+drag3)
+										mission = [buildingName,cityName,missionCash,missionEXP];
+										missionArray.push(mission);
 									}
 								}
 							}
 						},
 						complete: function(results) {
-							//sortBuildIndex();
-							$("#lblCash").html(thousands_separators(cash));
-							$("#lblEXP").html(thousands_separators(exp));
-							$("#lblNumMissions").html(numMissions);
+							$("#lblCash").val(thousands_separators(cash));
+							$("#lblEXP").val(thousands_separators(exp));
+							$("#lblNumMissions").val(numMissions);
+							/*$("#lblCash").attr("value",thousands_separators(cash));
+							$("#lblEXP").attr("value",thousands_separators(exp));
+							$("#lblNumMissions").attr("value",numMissions);*/
+							for (var i=0;i<missionArray.length;i++) {
+								var buildingName = missionArray[i][0];
+								var cityName = missionArray[i][1];
+								$(".missionBox").append(drag1+buildingName+drag2+cityName+drag3);
+							};
 							makeDraggies();
 						}
 					});
@@ -218,7 +257,7 @@ $(document).ready(function() {
 		});
 		
 	});
-
+	/*
 	$(".missionBox").on('click','.btnDelete',function(e){
 		var current = $(this)
 		$.confirm({
@@ -236,6 +275,7 @@ $(document).ready(function() {
 		
 		//sortBuildIndex()
 	});
+	*/
 
 	/*$("#sortable").sortable();
 	$("#sortable").disableSelection();

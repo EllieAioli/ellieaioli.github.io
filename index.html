@@ -47,10 +47,16 @@
 				<span class="text-light" style="font-size: 12pt;">&#9679;</span>
 			</div>
 			<div class="menu-item">
+				<a id="btnPrecise" title="Toggle Precise Placement" class="btn btn-sm btn-outline-secondary" data-toggle="button" aria-pressed="false">Precise Placement</a>
+			</div>
+			<div class="menu-item">
+				<span class="text-light" style="font-size: 12pt;">&#9679;</span>
+			</div>
+			<div class="menu-item">
 				<a id="btnBorders" title="Hide map borders" class="btn btn-sm btn-outline-secondary" data-toggle="button" aria-pressed="true"><i class="fa fa-eye-slash" aria-hidden="true"></i> Borders</a>
 			</div>
 			<div class="menu-item">
-				<a id="btnHideControls" title="Hide move, resize, etc. icons" class="btn btn-sm btn-outline-secondary" data-toggle="button" aria-pressed="true"><i class="fa fa-eye-slash" aria-hidden="true" ></i> Controls</a>
+				<a id="btnHideControls" title="Hide resize, move, etc. icons" class="btn btn-sm btn-outline-secondary" data-toggle="button" aria-pressed="true"><i class="fa fa-eye-slash" aria-hidden="true" ></i> Controls</a>
 			</div>
 			<div class="menu-item">
 				<span class="text-light" style="font-size: 12pt;">&#9679;</span>
@@ -76,19 +82,19 @@
 				<span class="text-light">>Cash:</span>
 			</div>
 			<div class="menu-item">
-				<input type="text" class="form-control form-control-sm" id="txtMinCash" placeholder="900">
+				<input type="text" class="form-control form-control-sm" id="txtMinCash" placeholder="0">
 			</div>
 			<div class="menu-item">
 				<span class="text-light">>EXP:</span>
 			</div>
 			<div class="menu-item">
-				<input type="text" class="form-control form-control-sm" id="txtMinEXP" placeholder="3000">
+				<input type="text" class="form-control form-control-sm" id="txtMinEXP" placeholder="0">
 			</div>
 			<div class="menu-item">
 				<span class="text-light">Guide Only</span>
 			</div>
 			<div class="menu-item">
-				<input type="checkbox" class="form-control form-control-sm " id="chkGuides">
+				<input type="checkbox" class="" id="chkGuides">
 			</div>
 			<div class="menu-item">
 				<label class="btn btn-primary btn-sm" title="Upload a .CSV file from DF2Haven"><i class="fa fa-upload"></i> DF2Haven .CSV <input type="file" id="itemMissions" accept=".csv" hidden></label>
@@ -105,24 +111,19 @@
 	<!-- main content -->
 	<div class="row">
 		<!-- map col -->
-		<div class="col" style="display:flex; flex-grow: 0;">
+		<div class="col" style="display:flex; flex-grow: 0;margin-left:10px;">
 			<div class="info-panel">
 				<div>
-					<span class="text-light">Missions: </span><span id="lblNumMissions" class="text-light">-</span><br>
-					<span class="text-success">Cash: $</span><span id="lblCash" class="text-success">-</span><br>
-	    			<span class="text-warning">EXP: </span><span id="lblEXP" class="text-light">-</span>
+					<span class="text-light">Missions: </span><input id="lblNumMissions" type="text" placeholder="-" class="text-light" style="border: none;background: transparent;resize:none;width:10ch;"><br>
+					<span class="text-success">Cash: $</span><input id="lblCash" type="text" placeholder="-" class="text-success" style="border: none;background: transparent;resize:none;width:10ch;"><br>
+	    			<span class="text-warning">EXP: </span><input id="lblEXP" type="text" placeholder="-" class="text-light" style="border: none;background: transparent;resize:none;width:10ch;">
 	    		</div>
 	    		<div>
-    				<textarea id="info-textarea" class="text-light" style="border: none;background: transparent;min-height: 22px; resize: both;" rows="1" placeholder="Info.."></textarea>
+    				<textarea id="info-textarea" class="text-light" style="border: none;background: transparent;min-height: 22px; resize: both;" rows="1" placeholder="Extra info.."></textarea>
     			</div>
 			</div>
-			<div>
-				<div id="tableDiv">
-		        	<!--Table will generate here~!-->
-		    	</div>
-				<div class="coords-panel">
-					<input id="lblCoords" type="text" value="0-0">
-				</div>
+			<div id="tableDiv">
+				<!--Table will generate here~!-->
 			</div>
 		</div>
 
