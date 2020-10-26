@@ -87,7 +87,7 @@ body {
 
 
 
-.info-panel {
+#info-panel {
     position: absolute;
     padding: 15px;
     background: #1A1A18;

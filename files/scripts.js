@@ -2,22 +2,23 @@
 var debug = 0;
 $(document).ready(function() {
 	var defaultMap = "files/df2map_10-16-20.jpg";
-	//test
 
 	function thousands_separators(num){
-	    var num_parts = num.toString().split(".");
-	    num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-	    return num_parts.join(".");
+		try {
+			var num_parts = num.toString().split(".");
+			num_parts[0] = num_parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			return num_parts.join(".");
+		} catch {
+			return;
+		}
   	}
 
 	function makeDraggies(){
 		$('.dragging').draggable();
-		$('.info-panel').draggable({
+		$('#info-panel').draggable({
 			containment: "parent"
 		});
-
 	};
-
 	makeDraggies();
 
 	var drag1 = `<div id="dragbox" class="draggies">
@@ -28,37 +29,79 @@ $(document).ready(function() {
 									<i class="fas fa-arrows-alt" style="color:#eee;"></i>
 								</div>
 								<div>
-								  	<textarea class="draggyBuilding" placeholder="Building" rows="1">`
-	var drag2 = `</textarea>
+									  <textarea id ="` 
+	var drag1alt_a = `<div id="dragbox" class="draggies">
+					<div style="display: flex;">
+						<div>
+							<div class="dragging ui-draggable ui-draggable-handle" style="position: relative; left: `
+	var drag1alt_b = `; top: `
+	var drag1alt_c = `;">
+								<div style="width:3ch;">
+									<i class="fas fa-arrows-alt" style="color:#eee;"></i>
+								</div>
+								<div>
+									<textarea id ="` 								
+	var drag2 = `" class="draggyBuilding" placeholder="Building" rows="1">`
+
+	var drag3 = `</textarea>
 							 	</div>
 					 		</div>
 					 	</div>
 				 		<div>
 							<textarea class="draggyCity" placeholder="City" rows="1">`
-	var drag3 = `</textarea>
+	var drag4 = `</textarea>
 						</div>
 					 	<!--<div class="hideable">
 							<a href="#" class="btnDelete fa fa-minus-circle" style="color:#470F0B;background-color:white;font-size: 10pt;margin-left: 4px;margin-bottom: 2px;border-radius: 50%;border:-1;"></a>
 						</div>-->
 				  	</div>
 				</div>`
-  	
+	
+	// load infoPanelArray Cookies, or initialize
+	if(typeof(Cookies.get('infoPanelArray')) == "undefined") {
+		var infoPanelArray = new Array(4);
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+	} else {
+		var infoPanelArray = JSON.parse(Cookies.get('infoPanelArray'));
+		$('#lblNumMissions').val(thousands_separators(infoPanelArray[0]));
+		$('#lblCash').val(thousands_separators(infoPanelArray[1]));
+		$('#lblEXP').val(thousands_separators(infoPanelArray[2]));
+		$('#info-textarea').val(infoPanelArray[3]);
+	}
+
+
 	//table generation over map image
-	var tableMode = 0;
-	var init = true;
+	if(typeof(Cookies.get('missionArray')) == "undefined") {
+		var init = true;
+	} else { 
+		var init = false;
+	}
+
+	if(typeof(Cookies.get('preciseMode')) == "undefined") {
+		var initPreciseMode = false
+	} else { 
+		if (Cookies.get('preciseMode') == 0){
+			var initPreciseMode = false;
+		} else {
+			var initPreciseMode = true;
+			$('#btnPrecise').attr('aria-pressed','true');
+			$('#btnPrecise').addClass('active');
+		}
+	}
+	
 	function generateTable(precise){
-		if (!init) {
-			if (tableMode == 0){tableMode=1}
-			else if (tableMode == 1){tableMode=0};
-		};
+		if (init) { Cookies.set('preciseMode',0) };
+		
 		if(precise){
 			var number_of_rows = 18*2;
 			var number_of_cols = 24*2;
 			var pClass = "hidden_dot"
+			Cookies.set('preciseMode',1)
 		} else {
 			var number_of_rows = 18;
 			var number_of_cols = 24;
 			var pClass = "hidden_dot_big"
+			Cookies.set('preciseMode',0)
 		};
 		init = false;
 
@@ -77,37 +120,104 @@ $(document).ready(function() {
 		table_body+='</table>';
 		$('#tableDiv').html(table_body);
 	}
-	generateTable();
-  	
+	generateTable(initPreciseMode);
 
+	// load markerArray Cookies, or initialize
+	if(typeof(Cookies.get('markerArray')) == "undefined") {
+		var markerArray = [];
+		Cookies.set('markerArray',markerArray);
+	} else { 
+		 // loop and modify id's in markerArray
+		 try{
+			var markerArray = JSON.parse(Cookies.get('markerArray'));
+		 } catch {
+			var markerArray = []; 
+		 }
+		 
+		 for(var i = 0;i < markerArray.length; i++) {
+			$('#'+markerArray[i]).find("p").toggleClass("selected");
+		 }
+	}
+
+	if(typeof(Cookies.get('backgroundURL')) == "undefined") {
+		Cookies.set('backgroundURL',defaultMap);
+	} else {
+		$('#genTable').css('background-image', 'url('+Cookies.get('backgroundURL')+')');
+	}
+
+	function clearMissionCookies(){
+		Cookies.remove('missionArray');
+		missionArray = [];	
+	}
+
+	function clearMarkerCookies() {
+		markerArray = [];
+		Cookies.set('markerArray',markerArray);
+		$("p").removeClass("selected");
+	}
+
+	function clearInfoPanelCookies(){
+		infoPanelArray = new Array(4);
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+	}
+
+	// if missionArray cookie exists, reconstruct the labels
+	if(typeof(Cookies.get('missionArray')) != "undefined"){
+		var missionArray = JSON.parse(Cookies.get('missionArray'));
+		$(".draggies").remove();
+		missionArray.sort(SortMissionsbyID);
+		for (var i=0;i<missionArray.length;i++) {
+			var buildingName = missionArray[i][1];
+			var cityName = missionArray[i][2];
+			var left = missionArray[i][5]
+			var top = missionArray[i][6]
+			$(".missionBox").append(drag1alt_a+left+drag1alt_b+top+drag1alt_c+i+drag2+buildingName+drag3+cityName+drag4);
+		};
+		makeDraggies();
+	} else {
+		var missionArray = [];
+	}
 	
-	
+	// on drag stop of a mission label
+	$('.missionBox').on('dragstop','.dragging', function(){
+		// search for the current draggy's id in missionArray and update its position
+		for (var i=0;i<missionArray.length;i++){
+			if(missionArray[i][0] == $(this).find('textarea').attr('id')){
+				//set position
+				missionArray[i][5] = $(this).css('left');
+				missionArray[i][6] = $(this).css('top');
+			}
+		}
+		Cookies.set('missionArray', JSON.stringify(missionArray));
+	});
+
+	// on tile click
 
 	$('#tableDiv').on('click', '.td_square', function(e){
 		$(this).find("p").toggleClass("selected");
+		if(markerArray.indexOf($(this).attr('id')) !== -1){
+			//exists
+			markerArray.splice(markerArray.indexOf($(this).attr('id')));
+		} else {
+			markerArray.push($(this).attr('id'));
+		}
+		Cookies.set('markerArray',JSON.stringify(markerArray));
+		console.log(markerArray);
 	});
 
-	$('.td_square').hover(function(){
-		$('#lblCoords').attr('value',$(this).attr('id'));
-	});
-
-	$('.squareInput').on("change",function(e){
-		//change background color maybe
-	});
-
+	// on hide borders button click
 	$('#btnBorders').on('click', function(e){
 		$('#genTable').toggleClass("hidden_border");
 	});
 
-	
-
+	// on clear markers button click
 	$('#btnClear').on('click', function(e){
 		$.confirm({
 	    	title: 'Confirm!',
 	    	content: 'Are you sure you want to delete all map markers?',
 	   	 	buttons: {
 	        	confirm: function () {
-	            	$("p").removeClass("selected");
+	            	clearMarkerCookies();
 	        	},
 	        	cancel: function () {
 	        		// do nothing
@@ -116,38 +226,76 @@ $(document).ready(function() {
 		});
 	});
 
-
+	
+	// on map url button submit
 	$("#btnMapURLSubmit").on('click',function(e){
 		var imageURL = $("#mapURL").val();
 		if (imageURL != ""){
+			Cookies.set('backgroundURL',imageURL);
 			$('#genTable').css("background-image", 'url('+imageURL+')');
 		}
-		
 	});
 
-
-	// Browse file button
-	$("#customFile").on("change", function() {
+	// on "browse for map file" button state change
+	$("#customFile").on("change", function(e) {
+		Cookies.set('backgroundURL',URL.createObjectURL(this.files[0]));
   		$('#genTable').css("background-image", 'url('+URL.createObjectURL(this.files[0])+')');
 	});
 
+	// on reset map button click
+	$('#resetMap').on('click',function(e){
+		Cookies.set('backgroundURL',defaultMap);
+		$('#genTable').css('background-image', 'url('+defaultMap+')');
+	});
+
+	// on precice placement button click
 	$("#btnPrecise").on("click", function(e) {
 		$.confirm({
 	    	title: 'Confirm!',
 	    	content: 'This will clear all markers! Are you sure?',
 	   	 	buttons: {
 	        	confirm: function () {
-	            	if (tableMode==0) {generateTable(true)}
-					else if (tableMode==1){generateTable()}
+					clearMarkerCookies();
+	            	if (Cookies.get('preciseMode')==0) {generateTable(true)}
+					else if (Cookies.get('preciseMode')==1){generateTable()}
 	        	},
 	        	cancel: function () {
-	        		// do nothing
+					// do nothing
+					if(Cookies.get('preciseMode')==0) {
+						$('#btnPrecise').removeClass('active');
+						$('#btnPrecise').attr('aria-pressed','false');
+					} else {
+						$('#btnPrecise').addClass('active');
+						$('#btnPrecise').attr('aria-pressed','true');
+					}
 	        	}
 	    	}
 		});
-		
 	});
 
+	$('#lblNumMissions').on('input',function(){
+		infoPanelArray[0] = $(this).val();
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+	});
+
+	$('#lblCash').on('input',function(){
+		infoPanelArray[1] = $(this).val();
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+	});
+
+
+	$('#lblEXP').on('input',function(){
+		infoPanelArray[2] = $(this).val();
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+	});
+
+	$('#info-textarea').on('input',function(){
+		infoPanelArray[3] = $(this).val();
+		console.log($(this).val());
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+	});
+
+	// https://stackoverflow.com/questions/16096872/how-to-sort-2-dimensional-array-by-column-value
 	function SortMissions(a, b) {
 		if (a[1] === b[1]) {
 			return 0;
@@ -155,7 +303,16 @@ $(document).ready(function() {
 		else {
 			return (a[1] < b[1]) ? -1 : 1;
 		}
-	} // https://stackoverflow.com/questions/16096872/how-to-sort-2-dimensional-array-by-column-value
+	}
+
+	function SortMissionsbyID(a,b) {
+		if (a[0] === b[0]) {
+			return 0;
+		}
+		else {
+			return (a[0] < b[0]) ? -1 : 1;
+		}
+	}
 
 	// On mision csv upload
 	$("#itemMissions").on('change', function(){
@@ -176,9 +333,8 @@ $(document).ready(function() {
 					if (isNaN(minExp)){minExp=0;}
 
 					$(".draggies").remove();
-
-					const missionArray = [];
-					//eg. [[building,city,cash,exp]]
+					clearMissionCookies();
+	
 	            	Papa.parse($("#itemMissions").prop('files')[0], {
 						header: true,
 						step: function(results) {
@@ -195,34 +351,38 @@ $(document).ready(function() {
 									var cityName = results.data["Mission City"];
 
 									if (chkGuides == true && missionGuide != "add guide") {
-										numMissions++;
 										cash += parseInt(results.data["Cash"]);
 										exp += parseInt(results.data["Exp"]);
-										mission = [buildingName,cityName,missionCash,missionEXP];
+										mission = [numMissions,buildingName,cityName,missionCash,missionEXP,0,0];
 										missionArray.push(mission);
+										numMissions++;
 									} else if (chkGuides == false) {
-										numMissions++;
 										cash += parseInt(results.data["Cash"]);
 										exp += parseInt(results.data["Exp"]);
-										mission = [buildingName,cityName,missionCash,missionEXP];
+										mission = [numMissions,buildingName,cityName,missionCash,missionEXP,"0","0"];
 										missionArray.push(mission);
+										numMissions++;
 									}
 								}
 							}
 						},
 						complete: function(results) {
+							$("#lblNumMissions").val(thousands_separators(numMissions));
 							$("#lblCash").val(thousands_separators(cash));
 							$("#lblEXP").val(thousands_separators(exp));
-							$("#lblNumMissions").val(numMissions);
-							/*$("#lblCash").attr("value",thousands_separators(cash));
-							$("#lblEXP").attr("value",thousands_separators(exp));
-							$("#lblNumMissions").attr("value",numMissions);*/
-							missionArray.sort(SortMissions);
+							console.log(missionArray);
+							missionArray.sort(SortMissionsbyID);
+							console.log(missionArray);
 							for (var i=0;i<missionArray.length;i++) {
-								var buildingName = missionArray[i][0];
-								var cityName = missionArray[i][1];
-								$(".missionBox").append(drag1+buildingName+drag2+cityName+drag3);
+								var buildingName = missionArray[i][1];
+								var cityName = missionArray[i][2];
+								$(".missionBox").append(drag1+i+drag2+buildingName+drag3+cityName+drag4);
 							};
+							infoPanelArray[0] = numMissions;
+							infoPanelArray[1] = cash;
+							infoPanelArray[2] = exp
+							Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+							Cookies.set('missionArray', JSON.stringify(missionArray));
 							makeDraggies();
 						}
 					});
@@ -235,13 +395,12 @@ $(document).ready(function() {
 		
 	});
 
+	// change label text color in txtTextColor input change
 	$('#txtTextColor').on('input',function(e){
 		$('.draggyBuilding').css("color",$('#txtTextColor').val());
 	});
 
-	$('#resetMap').on('click',function(e){
-		$('#genTable').css('background-image', 'url('+defaultMap+')');
-	});
+	
 
 	$('#btnRemoveAllMissions').on('click',function(e){
 		$.confirm({
@@ -249,15 +408,39 @@ $(document).ready(function() {
 	    	content: 'Are you sure you want to clear all missions?',
 	   	 	buttons: {
 	        	confirm: function () {
-	            	$(".draggies").remove();
+					$(".draggies").remove();
+					clearMissionCookies()
 	        	},
 	        	cancel: function () {
 	        		// do nothing
 	        	}
 	    	}
 		});
-		
 	});
+
+	$('#btnClearCookies').on('click',function(e){
+		$.confirm({
+	    	title: 'Confirm!',
+	    	content: 'Are you sure you want to clear all cookies?',
+	   	 	buttons: {
+	        	confirm: function () {
+					clearMissionCookies();
+					clearInfoPanelCookies();
+					clearMarkerCookies();
+					Cookies.set('backgroundURL',defaultMap);
+					$(".draggies").remove();
+					$('#lblNumMissions').val("");
+					$('#lblCash').val("");
+					$('#lblEXP').val("");
+					$('#info-textarea').val("");
+	        	},
+	        	cancel: function () {
+	        		// do nothing
+	        	}
+	    	}
+		});
+	});
+
 	/*
 	$(".missionBox").on('click','.btnDelete',function(e){
 		var current = $(this)
@@ -278,33 +461,17 @@ $(document).ready(function() {
 	});
 	*/
 
-	/*$("#sortable").sortable();
-	$("#sortable").disableSelection();
-
-
-	$("#sortable").on("sortstop", function(){
-		sortBuildIndex();
-	});*/
-
 	$("#btnHideControls").on("click",function(e){
-		//$("#controls").toggle();
-		//$(".btnDelete").toggle();
-		//$(".fa-sort").toggle();
 		$(".hideable").toggle();
 		$(".fa-arrows-alt").toggleClass("invisible_text");
 		$('.draggyBuilding').toggleClass("draggyClean");
 		$('#info-textarea').toggleClass("draggyClean");
 	});
 	
-
 	$("#btnAddBuilding").on('click', function(e){
-		//$("#sortable").append(li1+li2+li3)
-		$(".missionBox").append(drag1+drag2+drag3);
+		$(".missionBox").append(drag1+drag2+drag3+drag4);
 		makeDraggies();
-		//sortBuildIndex();
 	});
-
-
 
 	// confirms page refresh
 	$(window).bind('beforeunload', function(){

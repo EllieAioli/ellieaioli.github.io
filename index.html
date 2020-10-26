@@ -23,6 +23,8 @@
 	<!-- jquery ui -->
 	<link rel="stylesheet" href="files/jquery-ui.min.css">
 	<script src="files/jquery-ui.min.js"></script>
+
+	<script src="files/js.cookie.min.js"></script>
 </head>
 
 <body>
@@ -35,10 +37,9 @@
 			<div class="menu-item">
 				<a class="btn btn-primary btn-sm px-1" id="btnMapURLSubmit">Change</a>
 			</div>
-			<div class="menu-item">
-				<!-- upload -->
+			<!--<div class="menu-item">
 			  	<label class="btn btn-primary btn-sm" title="Upload map image"><i class="fa fa-upload"></i><input type="file" id="customFile" accept="image/*" hidden></label>
-			</div>
+			</div>-->
 			<div class="menu-item">
 				<!-- reset -->
 				<a class="btn btn-sm btn-dark" id="resetMap" title="Reset map image"><i class="fas fa-recycle" aria-hidden="true"></i></a>
@@ -53,21 +54,21 @@
 				<span class="text-light" style="font-size: 12pt;">&#9679;</span>
 			</div>
 			<div class="menu-item">
-				<a id="btnBorders" title="Hide map borders" class="btn btn-sm btn-outline-secondary" data-toggle="button" aria-pressed="true"><i class="fa fa-eye-slash" aria-hidden="true"></i> Borders</a>
+				<a id="btnBorders" title="Hide map borders" class="btn btn-sm btn-outline-secondary text-nowrap" data-toggle="button" aria-pressed="true"><i class="fa fa-eye-slash" aria-hidden="true"></i> Borders</a>
 			</div>
 			<div class="menu-item">
-				<a id="btnHideControls" title="Hide resize, move, etc. icons" class="btn btn-sm btn-outline-secondary" data-toggle="button" aria-pressed="true"><i class="fa fa-eye-slash" aria-hidden="true" ></i> Controls</a>
+				<a id="btnHideControls" title="Hide resize, move, etc. icons" class="btn btn-sm btn-outline-secondary text-nowrap" data-toggle="button" aria-pressed="true"><i class="fa fa-eye-slash" aria-hidden="true" ></i> Controls</a>
 			</div>
 			<div class="menu-item">
 				<span class="text-light" style="font-size: 12pt;">&#9679;</span>
 			</div>
 			<div class="menu-item">
-				<a id="btnClear" title="Delete all map markers"class="confirm btn btn-danger btn-sm"><i class="fa fa-trash" aria-hidden="true"></i> Markers</a>
+				<a id="btnClear" title="Delete all map markers"class="confirm btn btn-danger btn-sm text-nowrap"><i class="fa fa-trash" aria-hidden="true"></i> Markers</a>
 			</div>
 		</div>
 		<div class="flex-box" style="width:50%">
 			<!--<div class="menu-item">
-				<a id="btnAddBuilding" class="btn btn-sm btn-primary" title="Add a new, blank mission"><i class="fa fa-plus" aria-hidden="true"></i> New</a>
+				<a id="btnAddBuilding" class="btn btn-sm btn-primary text-nowrap" title="Add a new, blank mission"><i class="fa fa-plus" aria-hidden="true"></i> New</a>
 			</div>-->
 			<div class="menu-item">
 				<span class="text-light">Text Color:</span>
@@ -105,6 +106,9 @@
 			<div class="menu-item">
 				<a id="btnRemoveAllMissions" title="Delete all missions, including moved missions" class="btn btn-sm btn-danger"><i class="fa fa-trash" aria-hidden="true"></i> Missions</a>
 			</div>
+			<div class="menu-item">
+				<a id="btnClearCookies" title="Clear cookies" class="btn btn-sm btn-danger"><i class="fas fa-cookie-bite" aria-hidden="true"></i></a>
+			</div>
 
 		</div></div>
 
@@ -112,7 +116,7 @@
 	<div class="row">
 		<!-- map col -->
 		<div class="col" style="display:flex; flex-grow: 0;margin-left:10px;">
-			<div class="info-panel">
+			<div id="info-panel">
 				<div>
 					<span class="text-light">Missions: </span><input id="lblNumMissions" type="text" placeholder="-" class="text-light" style="border: none;background: transparent;resize:none;width:10ch;"><br>
 					<span class="text-success">Cash: $</span><input id="lblCash" type="text" placeholder="-" class="text-success" style="border: none;background: transparent;resize:none;width:10ch;"><br>
@@ -138,7 +142,7 @@
 									<i class="fas fa-arrows-alt" style="color:#eee;"></i>
 								</div>
 								<div>
-								  	<textarea class="draggyBuilding" placeholder="Building" rows="1"></textarea>
+								  	<textarea id ="0" class="draggyBuilding" placeholder="Building" rows="1"></textarea>
 							 	</div>
 					 		</div>
 					 	</div>
