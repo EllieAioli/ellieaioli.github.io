@@ -421,7 +421,7 @@ $(document).ready(function() {
 	$('#btnClearCookies').on('click',function(e){
 		$.confirm({
 	    	title: 'Confirm!',
-	    	content: 'Are you sure you want to clear all cookies?',
+	    	content: '<span style="color:red;font-weight:bold">THIS WILL CLEAR EVERYTHING!!!</span>',
 	   	 	buttons: {
 	        	confirm: function () {
 					clearMissionCookies();
