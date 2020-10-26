@@ -60,7 +60,7 @@ $(document).ready(function() {
 	// load infoPanelArray Cookies, or initialize
 	if(typeof(Cookies.get('infoPanelArray')) == "undefined") {
 		var infoPanelArray = new Array(4);
-		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray), {sameSite: 'Lax'});
 	} else {
 		var infoPanelArray = JSON.parse(Cookies.get('infoPanelArray'));
 		$('#lblNumMissions').val(thousands_separators(infoPanelArray[0]));
@@ -90,18 +90,18 @@ $(document).ready(function() {
 	}
 	
 	function generateTable(precise){
-		if (init) { Cookies.set('preciseMode',0) };
+		if (init) { Cookies.set('preciseMode',0, {sameSite: 'Lax'}) };
 		
 		if(precise){
 			var number_of_rows = 18*2;
 			var number_of_cols = 24*2;
 			var pClass = "hidden_dot"
-			Cookies.set('preciseMode',1)
+			Cookies.set('preciseMode',1, {sameSite: 'Lax'})
 		} else {
 			var number_of_rows = 18;
 			var number_of_cols = 24;
 			var pClass = "hidden_dot_big"
-			Cookies.set('preciseMode',0)
+			Cookies.set('preciseMode',0, {sameSite: 'Lax'})
 		};
 		init = false;
 
@@ -125,7 +125,7 @@ $(document).ready(function() {
 	// load markerArray Cookies, or initialize
 	if(typeof(Cookies.get('markerArray')) == "undefined") {
 		var markerArray = [];
-		Cookies.set('markerArray',markerArray);
+		Cookies.set('markerArray',markerArray, {sameSite: 'Lax'});
 	} else { 
 		 // loop and modify id's in markerArray
 		 try{
@@ -140,7 +140,7 @@ $(document).ready(function() {
 	}
 
 	if(typeof(Cookies.get('backgroundURL')) == "undefined") {
-		Cookies.set('backgroundURL',defaultMap);
+		Cookies.set('backgroundURL',defaultMap, {sameSite: 'Lax'});
 	} else {
 		$('#genTable').css('background-image', 'url('+Cookies.get('backgroundURL')+')');
 	}
@@ -158,7 +158,7 @@ $(document).ready(function() {
 
 	function clearInfoPanelCookies(){
 		infoPanelArray = new Array(4);
-		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray), {sameSite: 'Lax'});
 	}
 
 	// if missionArray cookie exists, reconstruct the labels
@@ -188,7 +188,7 @@ $(document).ready(function() {
 				missionArray[i][6] = $(this).css('top');
 			}
 		}
-		Cookies.set('missionArray', JSON.stringify(missionArray));
+		Cookies.set('missionArray', JSON.stringify(missionArray), {sameSite: 'Lax'});
 	});
 
 	// on tile click
@@ -201,7 +201,7 @@ $(document).ready(function() {
 		} else {
 			markerArray.push($(this).attr('id'));
 		}
-		Cookies.set('markerArray',JSON.stringify(markerArray));
+		Cookies.set('markerArray',JSON.stringify(markerArray), {sameSite: 'Lax'});
 		console.log(markerArray);
 	});
 
@@ -231,20 +231,20 @@ $(document).ready(function() {
 	$("#btnMapURLSubmit").on('click',function(e){
 		var imageURL = $("#mapURL").val();
 		if (imageURL != ""){
-			Cookies.set('backgroundURL',imageURL);
+			Cookies.set('backgroundURL',imageURL, {sameSite: 'Lax'});
 			$('#genTable').css("background-image", 'url('+imageURL+')');
 		}
 	});
 
 	// on "browse for map file" button state change
 	$("#customFile").on("change", function(e) {
-		Cookies.set('backgroundURL',URL.createObjectURL(this.files[0]));
+		Cookies.set('backgroundURL',URL.createObjectURL(this.files[0]), {sameSite: 'Lax'});
   		$('#genTable').css("background-image", 'url('+URL.createObjectURL(this.files[0])+')');
 	});
 
 	// on reset map button click
 	$('#resetMap').on('click',function(e){
-		Cookies.set('backgroundURL',defaultMap);
+		Cookies.set('backgroundURL',defaultMap, {sameSite: 'Lax'});
 		$('#genTable').css('background-image', 'url('+defaultMap+')');
 	});
 
@@ -275,24 +275,24 @@ $(document).ready(function() {
 
 	$('#lblNumMissions').on('input',function(){
 		infoPanelArray[0] = $(this).val();
-		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray), {sameSite: 'Lax'});
 	});
 
 	$('#lblCash').on('input',function(){
 		infoPanelArray[1] = $(this).val();
-		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray), {sameSite: 'Lax'});
 	});
 
 
 	$('#lblEXP').on('input',function(){
 		infoPanelArray[2] = $(this).val();
-		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray), {sameSite: 'Lax'});
 	});
 
 	$('#info-textarea').on('input',function(){
 		infoPanelArray[3] = $(this).val();
 		console.log($(this).val());
-		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
+		Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray), {sameSite: 'Lax'});
 	});
 
 	// https://stackoverflow.com/questions/16096872/how-to-sort-2-dimensional-array-by-column-value
@@ -381,8 +381,8 @@ $(document).ready(function() {
 							infoPanelArray[0] = numMissions;
 							infoPanelArray[1] = cash;
 							infoPanelArray[2] = exp
-							Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray));
-							Cookies.set('missionArray', JSON.stringify(missionArray));
+							Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray), {sameSite: 'Lax'});
+							Cookies.set('missionArray', JSON.stringify(missionArray), {sameSite: 'Lax'});
 							makeDraggies();
 						}
 					});
@@ -427,7 +427,7 @@ $(document).ready(function() {
 					clearMissionCookies();
 					clearInfoPanelCookies();
 					clearMarkerCookies();
-					Cookies.set('backgroundURL',defaultMap);
+					Cookies.set('backgroundURL',defaultMap, {sameSite: 'Lax'});
 					$(".draggies").remove();
 					$('#lblNumMissions').val("");
 					$('#lblCash').val("");
