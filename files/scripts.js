@@ -71,7 +71,7 @@ $(document).ready(function() {
 
 
 	//table generation over map image
-	if(typeof(Cookies.get('missionArray')) == "undefined") {
+	if(typeof(localStorage.getItem('missionArray')) == "undefined") {
 		var init = true;
 	} else { 
 		var init = false;
@@ -146,7 +146,8 @@ $(document).ready(function() {
 	}
 
 	function clearMissionCookies(){
-		Cookies.remove('missionArray');
+		//Cookies.remove('missionArray');
+		localStorage.removeItem('missionArray');
 		missionArray = [];	
 	}
 
@@ -162,8 +163,8 @@ $(document).ready(function() {
 	}
 
 	// if missionArray cookie exists, reconstruct the labels
-	if(typeof(Cookies.get('missionArray')) != "undefined"){
-		var missionArray = JSON.parse(Cookies.get('missionArray'));
+	if(localStorage.getItem('missionArray') != null) {
+		var missionArray = JSON.parse(localStorage.getItem('missionArray'));
 		$(".draggies").remove();
 		missionArray.sort(SortMissionsbyID);
 		for (var i=0;i<missionArray.length;i++) {
@@ -188,7 +189,8 @@ $(document).ready(function() {
 				missionArray[i][6] = $(this).css('top');
 			}
 		}
-		Cookies.set('missionArray', JSON.stringify(missionArray), {sameSite: 'Lax'});
+		localStorage.setItem('missionArray', JSON.stringify(missionArray));
+		//Cookies.set('missionArray', JSON.stringify(missionArray), {sameSite: 'Lax'});
 	});
 
 	// on tile click
@@ -359,7 +361,7 @@ $(document).ready(function() {
 									} else if (chkGuides == false) {
 										cash += parseInt(results.data["Cash"]);
 										exp += parseInt(results.data["Exp"]);
-										mission = [numMissions,buildingName,cityName,missionCash,missionEXP,"0","0"];
+										mission = [numMissions,buildingName,cityName,missionCash,missionEXP,0,0];
 										missionArray.push(mission);
 										numMissions++;
 									}
@@ -370,7 +372,6 @@ $(document).ready(function() {
 							$("#lblNumMissions").val(thousands_separators(numMissions));
 							$("#lblCash").val(thousands_separators(cash));
 							$("#lblEXP").val(thousands_separators(exp));
-							console.log(missionArray);
 							missionArray.sort(SortMissionsbyID);
 							console.log(missionArray);
 							for (var i=0;i<missionArray.length;i++) {
@@ -382,7 +383,8 @@ $(document).ready(function() {
 							infoPanelArray[1] = cash;
 							infoPanelArray[2] = exp
 							Cookies.set('infoPanelArray',JSON.stringify(infoPanelArray), {sameSite: 'Lax'});
-							Cookies.set('missionArray', JSON.stringify(missionArray), {sameSite: 'Lax'});
+							localStorage.setItem('missionArray', JSON.stringify(missionArray));
+							//Cookies.set('missionArray', JSON.stringify(missionArray), {sameSite: 'Lax'});
 							makeDraggies();
 						}
 					});
