@@ -146,7 +146,7 @@ $(document).ready(function() {
 	}
 
 	function clearMissionCookies(){
-		//Cookies.remove('missionArray');
+		Cookies.remove('missionArray');
 		localStorage.removeItem('missionArray');
 		missionArray = [];	
 	}
