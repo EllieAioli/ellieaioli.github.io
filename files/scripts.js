@@ -348,9 +348,15 @@ $(document).ready(function() {
 								var missionGuide = results.data["Quest Walkthrough"];
 								var missionType = results.data["Mission Type"];
 
+								
+
 								if (missionCash >= minCash && missionEXP >= minExp && missionType != "Exterminate") {
 									var buildingName = results.data["Mission Building"];
 									var cityName = results.data["Mission City"];
+
+									if (missionType == "Blood Samples") {
+										buildingName = buildingName + " (BS)"
+									}
 
 									if (chkGuides == true && missionGuide != "add guide") {
 										cash += parseInt(results.data["Cash"]);
