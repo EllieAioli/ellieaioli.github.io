@@ -355,9 +355,9 @@ $(document).ready(function() {
 									var cityName = results.data["Mission City"];
 
 									if (missionType == "Blood Samples") {
-										buildingName = buildingName + " (BS)"
+										buildingName = buildingName + "(BS)"
 									} else {
-										buildingName = buildingName + " (F)"
+										buildingName = buildingName + "(F)"
 									}
 
 									if (chkGuides == true && missionGuide != "add guide") {
