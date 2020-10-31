@@ -356,6 +356,8 @@ $(document).ready(function() {
 
 									if (missionType == "Blood Samples") {
 										buildingName = buildingName + " (BS)"
+									} else {
+										buildingName = buildingName + " (F)"
 									}
 
 									if (chkGuides == true && missionGuide != "add guide") {
