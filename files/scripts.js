@@ -350,7 +350,7 @@ $(document).ready(function() {
 
 								
 
-								if (missionCash >= minCash && missionEXP >= minExp && missionType != "Exterminate") {
+								if ((missionCash >= minCash) && (missionEXP >= minExp) && (missionType != "Exterminate") && (missionType != "Bring Item")) {
 									var buildingName = results.data["Mission Building"];
 									var cityName = results.data["Mission City"];
 
