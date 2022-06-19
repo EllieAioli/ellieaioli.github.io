@@ -94,12 +94,12 @@ $(document).ready(function() {
 		
 		if(precise){
 			var number_of_rows = 18*2;
-			var number_of_cols = 24*2;
+			var number_of_cols = 30*2;
 			var pClass = "hidden_dot"
 			Cookies.set('preciseMode',1, {sameSite: 'Lax'})
 		} else {
 			var number_of_rows = 18;
-			var number_of_cols = 24;
+			var number_of_cols = 30;
 			var pClass = "hidden_dot_big"
 			Cookies.set('preciseMode',0, {sameSite: 'Lax'})
 		};
